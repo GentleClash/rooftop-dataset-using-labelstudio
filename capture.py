@@ -9,7 +9,7 @@ import sys
 class SatelliteImageScraper:
     def __init__(self, base_folder='satellite_images', 
                  crop_width=500, crop_height=500, 
-                 crop_x_offset=100, crop_y_offset=100, batch = 50):
+                 crop_x_offset=100, crop_y_offset=100, batch = 10):
         """
         Initialize the scraper with a defined movement border and random positioning
         """
@@ -20,10 +20,8 @@ class SatelliteImageScraper:
         self.crop_y_offset = crop_y_offset
         self.batch = batch
         
-        # Disable fail-safe
         pyautogui.FAILSAFE = False
         
-        # Create base folder
         os.makedirs(base_folder, exist_ok=True)
         
         # Image counter
@@ -77,7 +75,7 @@ class SatelliteImageScraper:
         random_y = random.randint(self.border_start_y, self.border_end_y)
         
         # Move cursor to the random position
-        pyautogui.moveTo(random_x, random_y, duration=0.5)
+        pyautogui.moveTo(random_x, random_y, duration=0.0)
         
         print(f"Moved to random position: ({random_x}, {random_y})")
 
@@ -114,8 +112,9 @@ class SatelliteImageScraper:
         # Calculate relative drag
         drag_x = new_x - current_x
         drag_y = new_y - current_y
+        duration = random.uniform(1.0, 2.0)
    
-        pyautogui.drag(drag_x, drag_y, duration=1.5)
+        pyautogui.drag(drag_x, drag_y, duration=duration)
         
         return direction
 
@@ -186,7 +185,7 @@ def main():
     try:
         batch = sys.argv[1]
     except:
-        batch = 50
+        batch = 10
 
         #Debug printing
     print(f"Batch: {batch}")
@@ -196,7 +195,7 @@ def main():
         crop_height=650,
         crop_x_offset=100,
         crop_y_offset=200,
-        batch = 50
+        batch = batch
     )
     scraper.run()
 
